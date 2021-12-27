@@ -17,9 +17,7 @@ router.get('/', function callName(req, res) {
       
     // E.g : http://localhost:3000/name?firstname=Mike&lastname=Will
     // so, first name = Mike and last name = Will
-    var process = spawn('python',["./recommendation/recommentmovie.py",
-                            req.query.firstname,
-                            req.query.lastname] );
+    var process = spawn('python',["./recommendation/test.py"] );
   
     // Takes stdout data from script which executed
     // with arguments and send this data to res object
