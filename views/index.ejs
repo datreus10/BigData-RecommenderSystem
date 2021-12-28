@@ -106,6 +106,7 @@
 							<!-- end header nav -->
 
 							<!-- header auth -->
+							<%if(!user){%>
 							<div class="header__auth">
 								<button class="header__search-btn" type="button">
 									<i class="icon ion-ios-search"></i>
@@ -116,6 +117,20 @@
 									<span>sign in</span>
 								</a>
 							</div>
+							<%}else{%>
+								
+								<div class="header__auth">
+									<!-- <label  style="color: white; margin-right: 30px; margin-top: 4px; font-size: small;" >Hello, <%=user.Name%></label> -->
+									<button class="header__search-btn" type="button">
+										<i class="icon ion-ios-search"></i>
+									</button>
+	
+									<a href="/logout" class="header__sign-in">
+										<i class="icon ion-ios-log-in"></i>
+										<span>Logout</span>
+									</a>
+								</div>
+								<%}%>
 							<!-- end header auth -->
 
 							<!-- header menu btn -->

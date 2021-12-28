@@ -19,7 +19,8 @@ const getHomePage = async (req, res, next) => {
   // const movies = moviesFetch;
 
   res.render("index", {
-    movies: testMovies
+    movies: testMovies,
+    user:req.user
   });
 };
 

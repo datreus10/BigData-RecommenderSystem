@@ -27,12 +27,12 @@ const accessToken = async function(req,res,next){
     Password = req.body.Password
     try{
            
-            var user = await User.find({Email:Email,Password:Password})
-            if(user.length == 0){
+            var user = await User.findOne({Email:Email,Password:Password})
+            if(!user){
                 //req.flash('error',"Đăng nhập không thành công")
-                return res.redirect('/login')
+                return res.redirect('/signin')
             }else{
-                req.userId = user._id
+                req.userId = user._id;
                 token= jwt.sign({_id:user._id},'signature',{expiresIn:'4h'})
                 res.cookie("token", token);
                 next()
