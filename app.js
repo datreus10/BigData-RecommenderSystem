@@ -9,7 +9,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var pythonopen = require('./routes/pythonopen');
 var moviesRouter = require('./routes/movies');
-
+var signupRouter = require('./routes/SignUp');
+var signinRouter = require('./routes/SignIn');
 var app = express();
 
 // view engine setup
@@ -26,8 +27,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/movies',moviesRouter);
 app.use('/name', pythonopen);
-
-
+app.use('/signup',signupRouter);
+app.use('/signin',signinRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
