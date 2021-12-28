@@ -9,14 +9,14 @@ const testMovies = [
 ];
 
 const getHomePage = async (req, res, next) => {
-  const moviesFetch = Promise.all(
-    testMovies.map((item) => {
-      const movie = movieAPI.splitMovieNameAndYear(item);
-      return movieAPI.searchByNameAndYear(movie.name, movie.year);
-    })
-  ).then((values) => values.map((e) => e.results[0]));
+  // const moviesFetch = Promise.all(
+  //   testMovies.map((item) => {
+  //     const movie = movieAPI.splitMovieNameAndYear(item);
+  //     return movieAPI.searchByNameAndYear(movie.name, movie.year);
+  //   })
+  // ).then((values) => values.map((e) => e.results[0]));
 
-  const movies = moviesFetch;
+  // const movies = moviesFetch;
 
   res.render("index", {
     movies: testMovies
