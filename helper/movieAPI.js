@@ -20,14 +20,29 @@ const searchByNameAndYear = async (movieName, year) => {
         API_KEY
     );
     return response.data;
-    
   } catch (error) {
     console.error(error);
   }
-  
+};
+
+const getMoviesById = async(lstId) => {
+  try {
+    const result = [];
+    for (let i = 0; i < lstId.length; i++) {
+      const id = lstId[i];
+      const response = await axios.get(
+        baseURL + `/movie/${id}?api_key=` + API_KEY
+      );
+      result.push(response.data);
+    }
+    return result;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 module.exports = {
+  getMoviesById,
   searchByNameAndYear,
   splitMovieNameAndYear,
 };

@@ -1,4 +1,5 @@
 const movieAPI = require("../helper/movieAPI");
+const { spawn } = require("child_process");
 
 const testMovies = [
   "Toy Story (1995)",
@@ -8,19 +9,25 @@ const testMovies = [
   "Father of the Bride Part II (1995)",
 ];
 
-const getHomePage = async (req, res, next) => {
-  // const moviesFetch = Promise.all(
-  //   testMovies.map((item) => {
-  //     const movie = movieAPI.splitMovieNameAndYear(item);
-  //     return movieAPI.searchByNameAndYear(movie.name, movie.year);
-  //   })
-  // ).then((values) => values.map((e) => e.results[0]));
+const getHomePage = (req, res, next) => {
+  const userId = 1;
 
-  // const movies = moviesFetch;
+  let result;
 
-  res.render("index", {
-    movies: testMovies,
-    user:req.user
+  const python = spawn("python3", ["./recommendation/loadRec.py", userId]);
+  // collect data from script
+  python.stdout.on("data", function (data) {
+    result = data.toString();
+  });
+  // in close event we are sure that stream from child process is closed
+  python.on("close", async (code) => {
+    result = JSON.parse(result);
+
+    res.render("index", {
+      movies: await movieAPI.getMoviesById(result["tmdbId"]),
+      recommend: result,
+      user: req.user,
+    });
   });
 };
 
