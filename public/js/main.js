@@ -391,8 +391,8 @@ $(document).ready(function () {
 			var firstSlider = document.getElementById('filter__years');
 			noUiSlider.create(firstSlider, {
 				range: {
-					'min': 2000,
-					'max': 2018
+					'min': 1930,
+					'max': 2021
 				},
 				step: 1,
 				connect: true,
@@ -406,7 +406,7 @@ $(document).ready(function () {
 				document.getElementById('filter__years-end')
 			];
 			firstSlider.noUiSlider.on('update', function( values, handle ) {
-				firstValues[handle].innerHTML = values[handle];
+				firstValues[handle].value = values[handle];
 			});
 		} else {
 			return false;
@@ -422,11 +422,11 @@ $(document).ready(function () {
 			noUiSlider.create(secondSlider, {
 				range: {
 					'min': 0,
-					'max': 10
+					'max': 5
 				},
 				step: 0.1,
 				connect: true,
-				start: [2.5, 8.6],
+				start: [3.5, 5],
 				format: wNumb({
 					decimals: 1,
 				})
@@ -438,7 +438,7 @@ $(document).ready(function () {
 			];
 
 			secondSlider.noUiSlider.on('update', function( values, handle ) {
-				secondValues[handle].innerHTML = values[handle];
+				secondValues[handle].value = values[handle];
 			});
 
 			$('.filter__item-menu--range').on('click.bs.dropdown', function (e) {
