@@ -36,109 +36,7 @@
 <body class="body">
 	
 	<!-- header -->
-	<header class="header">
-		<div class="header__wrap">
-			<div class="container">
-				<div class="row">
-					<div class="col-12">
-						<div class="header__content">
-							<!-- header logo -->
-							<a href="index.html" class="header__logo">
-								<img src="/img/logo.svg" alt="">
-							</a>
-							<!-- end header logo -->
-
-							<!-- header nav -->
-							<ul class="header__nav">
-								<!-- dropdown -->
-								<li class="header__nav-item">
-									<a class="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuHome" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Home</a>
-
-									<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuHome">
-										<li><a href="index.html">Home slideshow bg</a></li>
-										<li><a href="index2.html">Home static bg</a></li>
-									</ul>
-								</li>
-								<!-- end dropdown -->
-
-								<!-- dropdown -->
-								<li class="header__nav-item">
-									<a class="dropdown-toggle header__nav-link" href="#" role="button" id="dropdownMenuCatalog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catalog</a>
-
-									<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuCatalog">
-										<li><a href="catalog1.html">Catalog Grid</a></li>
-										<li><a href="catalog2.html">Catalog List</a></li>
-										<li><a href="details1.html">Details Movie</a></li>
-										<li><a href="details2.html">Details TV Series</a></li>
-									</ul>
-								</li>
-								<!-- end dropdown -->
-
-								<li class="header__nav-item">
-									<a href="pricing.html" class="header__nav-link">Pricing Plan</a>
-								</li>
-
-								<li class="header__nav-item">
-									<a href="faq.html" class="header__nav-link">Help</a>
-								</li>
-
-								<!-- dropdown -->
-								<li class="dropdown header__nav-item">
-									<a class="dropdown-toggle header__nav-link header__nav-link--more" href="#" role="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon ion-ios-more"></i></a>
-
-									<ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuMore">
-										<li><a href="about.html">About</a></li>
-										<li><a href="signin.html">Sign In</a></li>
-										<li><a href="signup.html">Sign Up</a></li>
-										<li><a href="404.html">404 Page</a></li>
-									</ul>
-								</li>
-								<!-- end dropdown -->
-							</ul>
-							<!-- end header nav -->
-
-							<!-- header auth -->
-							<div class="header__auth">
-								<button class="header__search-btn" type="button">
-									<i class="icon ion-ios-search"></i>
-								</button>
-
-								<a href="signin.html" class="header__sign-in">
-									<i class="icon ion-ios-log-in"></i>
-									<span>sign in</span>
-								</a>
-							</div>
-							<!-- end header auth -->
-
-							<!-- header menu btn -->
-							<button class="header__btn" type="button">
-								<span></span>
-								<span></span>
-								<span></span>
-							</button>
-							<!-- end header menu btn -->
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- header search -->
-		<form action="#" class="header__search">
-			<div class="container">
-				<div class="row">
-					<div class="col-12">
-						<div class="header__search-content">
-							<input type="text" placeholder="Search for a movie, TV Series that you are looking for">
-
-							<button type="button">search</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</form>
-		<!-- end header search -->
-	</header>
+	<%- include('components/header_footer/header') %>
 	<!-- end header -->
 
 	<!-- details -->
@@ -201,21 +99,8 @@
 
 				<!-- player -->
 				<div class="col-12 col-xl-6">
-					<video controls crossorigin playsinline poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg" id="player">
-						<!-- Video files -->
-						<source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" type="video/mp4" size="576">
-						<source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4" type="video/mp4" size="720">
-						<source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4" type="video/mp4" size="1080">
-						<source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1440p.mp4" type="video/mp4" size="1440">
-
-						<!-- Caption files -->
-						<track kind="captions" label="English" srclang="en" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt"
-						    default>
-						<track kind="captions" label="Français" srclang="fr" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt">
-
-						<!-- Fallback for browsers that don't support the <video> element -->
-						<a href="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" download>Download</a>
-					</video>
+					<iframe width="100%" height="100%" src="https://www.youtube.com/embed/ZHJt9kaxjNo">
+					</iframe>
 				</div>
 				<!-- end player -->
 
@@ -266,16 +151,8 @@
 						<!-- content tabs nav -->
 						<ul class="nav nav-tabs content__tabs" id="content__tabs" role="tablist">
 							<li class="nav-item">
-								<a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Comments</a>
-							</li>
-
-							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Reviews</a>
-							</li>
-
-							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Photos</a>
-							</li>
+								<a class="nav-link active" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Review</a>
+							</li>				
 						</ul>
 						<!-- end content tabs nav -->
 
@@ -288,11 +165,9 @@
 
 							<div class="content__mobile-tabs-menu dropdown-menu" aria-labelledby="mobile-tabs">
 								<ul class="nav nav-tabs" role="tablist">
-									<li class="nav-item"><a class="nav-link active" id="1-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Comments</a></li>
+									<li class="nav-item"><a class="nav-link active" id="1-tab" data-toggle="tab" href="#tab-1" role="tab" aria-controls="tab-1" aria-selected="true">Review</a></li>
 
-									<li class="nav-item"><a class="nav-link" id="2-tab" data-toggle="tab" href="#tab-2" role="tab" aria-controls="tab-2" aria-selected="false">Reviews</a></li>
-
-									<li class="nav-item"><a class="nav-link" id="3-tab" data-toggle="tab" href="#tab-3" role="tab" aria-controls="tab-3" aria-selected="false">Photos</a></li>
+									
 								</ul>
 							</div>
 						</div>
@@ -307,119 +182,9 @@
 				<div class="col-12 col-lg-8 col-xl-8">
 					<!-- content tabs -->
 					<div class="tab-content" id="myTabContent">
+						
+
 						<div class="tab-pane fade show active" id="tab-1" role="tabpanel" aria-labelledby="1-tab">
-							<div class="row">
-								<!-- comments -->
-								<div class="col-12">
-									<div class="comments">
-										<ul class="comments__list">
-											<li class="comments__item">
-												<div class="comments__autor">
-													<img class="comments__avatar" src="/img/user.png" alt="">
-													<span class="comments__name">John Doe</span>
-													<span class="comments__time">30.08.2018, 17:53</span>
-												</div>
-												<p class="comments__text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
-												<div class="comments__actions">
-													<div class="comments__rate">
-														<button type="button"><i class="icon ion-md-thumbs-up"></i>12</button>
-
-														<button type="button">7<i class="icon ion-md-thumbs-down"></i></button>
-													</div>
-
-													<button type="button"><i class="icon ion-ios-share-alt"></i>Reply</button>
-													<button type="button"><i class="icon ion-ios-quote"></i>Quote</button>
-												</div>
-											</li>
-
-											<li class="comments__item comments__item--answer">
-												<div class="comments__autor">
-													<img class="comments__avatar" src="/img/user.png" alt="">
-													<span class="comments__name">John Doe</span>
-													<span class="comments__time">24.08.2018, 16:41</span>
-												</div>
-												<p class="comments__text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-												<div class="comments__actions">
-													<div class="comments__rate">
-														<button type="button"><i class="icon ion-md-thumbs-up"></i>8</button>
-
-														<button type="button">3<i class="icon ion-md-thumbs-down"></i></button>
-													</div>
-
-													<button type="button"><i class="icon ion-ios-share-alt"></i>Reply</button>
-													<button type="button"><i class="icon ion-ios-quote"></i>Quote</button>
-												</div>
-											</li>
-
-											<li class="comments__item comments__item--quote">
-												<div class="comments__autor">
-													<img class="comments__avatar" src="/img/user.png" alt="">
-													<span class="comments__name">John Doe</span>
-													<span class="comments__time">11.08.2018, 11:11</span>
-												</div>
-												<p class="comments__text"><span>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</span>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-												<div class="comments__actions">
-													<div class="comments__rate">
-														<button type="button"><i class="icon ion-md-thumbs-up"></i>11</button>
-
-														<button type="button">1<i class="icon ion-md-thumbs-down"></i></button>
-													</div>
-
-													<button type="button"><i class="icon ion-ios-share-alt"></i>Reply</button>
-													<button type="button"><i class="icon ion-ios-quote"></i>Quote</button>
-												</div>
-											</li>
-
-											<li class="comments__item">
-												<div class="comments__autor">
-													<img class="comments__avatar" src="/img/user.png" alt="">
-													<span class="comments__name">John Doe</span>
-													<span class="comments__time">07.08.2018, 14:33</span>
-												</div>
-												<p class="comments__text">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.</p>
-												<div class="comments__actions">
-													<div class="comments__rate">
-														<button type="button"><i class="icon ion-md-thumbs-up"></i>99</button>
-
-														<button type="button">35<i class="icon ion-md-thumbs-down"></i></button>
-													</div>
-
-													<button type="button"><i class="icon ion-ios-share-alt"></i>Reply</button>
-													<button type="button"><i class="icon ion-ios-quote"></i>Quote</button>
-												</div>
-											</li>
-
-											<li class="comments__item">
-												<div class="comments__autor">
-													<img class="comments__avatar" src="/img/user.png" alt="">
-													<span class="comments__name">John Doe</span>
-													<span class="comments__time">02.08.2018, 15:24</span>
-												</div>
-												<p class="comments__text">Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-												<div class="comments__actions">
-													<div class="comments__rate">
-														<button type="button"><i class="icon ion-md-thumbs-up"></i>74</button>
-
-														<button type="button">13<i class="icon ion-md-thumbs-down"></i></button>
-													</div>
-													
-													<button type="button"><i class="icon ion-ios-share-alt"></i>Reply</button>
-													<button type="button"><i class="icon ion-ios-quote"></i>Quote</button>
-												</div>
-											</li>
-										</ul>
-
-										<form action="#" class="form">
-											<textarea id="text" name="text" class="form__textarea" placeholder="Add comment"></textarea>
-											<button type="button" class="form__btn">Send</button>
-										</form>
-									</div>
-								</div>
-								<!-- end comments -->
-							</div>
-						</div>
-
-						<div class="tab-pane fade" id="tab-2" role="tabpanel" aria-labelledby="2-tab">
 							<div class="row">
 								<!-- reviews -->
 								<div class="col-12">
@@ -462,10 +227,24 @@
 										<form action="#" class="form">
 											<input type="text" class="form__input" placeholder="Title">
 											<textarea class="form__textarea" placeholder="Review"></textarea>
-											<div class="form__slider">
-												<div class="form__slider-rating" id="slider__rating"></div>
-												<div class="form__slider-value" id="form__slider-value"></div>
+											<div class="form__slider star-rating">
+												<!-- <div class="form__slider-rating" id="slider__rating"></div>
+												<div class="form__slider-value" id="form__slider-value"></div> -->
+												<fieldset class="rating">
+													<input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+													<input type="radio" id="star4half" name="rating" value="4 and a half" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+													<input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+													<input type="radio" id="star3half" name="rating" value="3 and a half" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+													<input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+													<input type="radio" id="star2half" name="rating" value="2 and a half" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+													<input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+													<input type="radio" id="star1half" name="rating" value="1 and a half" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+													<input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+													<input type="radio" id="starhalf" name="rating" value="half" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+												</fieldset>
 											</div>
+											
+											
 											<button type="button" class="form__btn">Send</button>
 										</form>
 									</div>
@@ -474,67 +253,7 @@
 							</div>
 						</div>
 
-						<div class="tab-pane fade" id="tab-3" role="tabpanel" aria-labelledby="3-tab">
-							<!-- project gallery -->
-							<div class="gallery" itemscope>
-								<div class="row">
-									<!-- gallery item -->
-									<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-										<a href="/img/gallery/project-1.jpg" itemprop="contentUrl" data-size="1920x1280">
-											<img src="/img/gallery/project-1.jpg" itemprop="thumbnail" alt="Image description" />
-										</a>
-										<figcaption itemprop="caption description">Some image caption 1</figcaption>
-									</figure>
-									<!-- end gallery item -->
-
-									<!-- gallery item -->
-									<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-										<a href="/img/gallery/project-2.jpg" itemprop="contentUrl" data-size="1920x1280">
-											<img src="/img/gallery/project-2.jpg" itemprop="thumbnail" alt="Image description" />
-										</a>
-										<figcaption itemprop="caption description">Some image caption 2</figcaption>
-									</figure>
-									<!-- end gallery item -->
-
-									<!-- gallery item -->
-									<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-										<a href="/img/gallery/project-3.jpg" itemprop="contentUrl" data-size="1920x1280">
-											<img src="/img/gallery/project-3.jpg" itemprop="thumbnail" alt="Image description" />
-										</a>
-										<figcaption itemprop="caption description">Some image caption 3</figcaption>
-									</figure>
-									<!-- end gallery item -->
-
-									<!-- gallery item -->
-									<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-										<a href="/img/gallery/project-4.jpg" itemprop="contentUrl" data-size="1920x1280">
-											<img src="/img/gallery/project-4.jpg" itemprop="thumbnail" alt="Image description" />
-										</a>
-										<figcaption itemprop="caption description">Some image caption 4</figcaption>
-									</figure>
-									<!-- end gallery item -->
-
-									<!-- gallery item -->
-									<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-										<a href="/img/gallery/project-5.jpg" itemprop="contentUrl" data-size="1920x1280">
-											<img src="/img/gallery/project-5.jpg" itemprop="thumbnail" alt="Image description" />
-										</a>
-										<figcaption itemprop="caption description">Some image caption 5</figcaption>
-									</figure>
-									<!-- end gallery item -->
-
-									<!-- gallery item -->
-									<figure class="col-12 col-sm-6 col-xl-4" itemprop="associatedMedia" itemscope>
-										<a href="/img/gallery/project-6.jpg" itemprop="contentUrl" data-size="1920x1280">
-											<img src="/img/gallery/project-6.jpg" itemprop="thumbnail" alt="Image description" />
-										</a>
-										<figcaption itemprop="caption description">Some image caption 6</figcaption>
-									</figure>
-									<!-- end gallery item -->
-								</div>
-							</div>
-							<!-- end project gallery -->
-						</div>
+						
 					</div>
 					<!-- end content tabs -->
 				</div>
@@ -681,72 +400,7 @@
 	<!-- end content -->
 
 	<!-- footer -->
-	<footer class="footer">
-		<div class="container">
-			<div class="row">
-				<!-- footer list -->
-				<div class="col-12 col-md-3">
-					<h6 class="footer__title">Download Our App</h6>
-					<ul class="footer__app">
-						<li><a href="#"><img src="/img/Download_on_the_App_Store_Badge.svg" alt=""></a></li>
-						<li><a href="#"><img src="/img/google-play-badge.png" alt=""></a></li>
-					</ul>
-				</div>
-				<!-- end footer list -->
-
-				<!-- footer list -->
-				<div class="col-6 col-sm-4 col-md-3">
-					<h6 class="footer__title">Resources</h6>
-					<ul class="footer__list">
-						<li><a href="#">About Us</a></li>
-						<li><a href="#">Pricing Plan</a></li>
-						<li><a href="#">Help</a></li>
-					</ul>
-				</div>
-				<!-- end footer list -->
-
-				<!-- footer list -->
-				<div class="col-6 col-sm-4 col-md-3">
-					<h6 class="footer__title">Legal</h6>
-					<ul class="footer__list">
-						<li><a href="#">Terms of Use</a></li>
-						<li><a href="#">Privacy Policy</a></li>
-						<li><a href="#">Security</a></li>
-					</ul>
-				</div>
-				<!-- end footer list -->
-
-				<!-- footer list -->
-				<div class="col-12 col-sm-4 col-md-3">
-					<h6 class="footer__title">Contact</h6>
-					<ul class="footer__list">
-						<li><a href="tel:+18002345678">+1 (800) 234-5678</a></li>
-						<li><a href="mailto:support@moviego.com">support@flixgo.com</a></li>
-					</ul>
-					<ul class="footer__social">
-						<li class="facebook"><a href="#"><i class="icon ion-logo-facebook"></i></a></li>
-						<li class="instagram"><a href="#"><i class="icon ion-logo-instagram"></i></a></li>
-						<li class="twitter"><a href="#"><i class="icon ion-logo-twitter"></i></a></li>
-						<li class="vk"><a href="#"><i class="icon ion-logo-vk"></i></a></li>
-					</ul>
-				</div>
-				<!-- end footer list -->
-
-				<!-- footer copyright -->
-				<div class="col-12">
-					<div class="footer__copyright">
-						<small><a target="_blank" href="https://www.templateshub.net">Templates Hub</a></small>
-
-						<ul>
-							<li><a href="#">Terms of Use</a></li>
-							<li><a href="#">Privacy Policy</a></li>
-						</ul>
-					</div>
-				</div>
-				<!-- end footer copyright -->
-			</div>
-		</div>
-	</footer>
+	<%- include('components/header_footer/footer') %>
 	<!-- end footer -->
 
 	<!-- Root element of PhotoSwipe. Must have class pswp. -->
