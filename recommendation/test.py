@@ -3,6 +3,9 @@ from pyspark.sql import SparkSession
 from pyspark.sql import functions as f
 from pyspark.ml.recommendation import ALS, ALSModel
 import json
+import pandas;
+
+import sys;
 
 spark = SparkSession.builder \
     .master('local[*]') \
@@ -12,18 +15,12 @@ spark = SparkSession.builder \
 model =  ALSModel.load("./modelrecommendation")
 
 
-with open("./data/ml-25m/test.csv", 'a+') as file:
-    file.write('\n5,3113,3.4,1147868510')
-    file.close()    
-
-
 ratings = (
     spark.read.csv(
-        path = "./data/ml-25m/test.csv",
+        path = "./data/ml-25m/ratings.csv",
         sep=",", header=True,quote='"',schema="userId INT, movieId INT, rating DOUBLE, timestamp INT",
     ).select("userId", "movieId", "rating")
 )
-# ratings.show(20)
 movies = (
     spark.read.csv(
         path = "./data/ml-25m/movies.csv",
@@ -34,17 +31,32 @@ movies = (
     )
 )
 
+links = (
+    spark.read.csv(
+        path="./data/ml-25m/links.csv",
+        sep=",", header=True, quote='"', schema="movieId INT, imdbId STRING, tmdbId STRING",
+    ).select("movieId","tmdbId")
+)
 
-# movies.show(5,False)
 
-ratedMovies = ratings.filter(f.col('userId')==1).select('movieId').rdd.flatMap(lambda x:x).collect()
+
+ratedMovies = ratings.filter(f.col('userId')==10).select('movieId').rdd.flatMap(lambda x:x).collect()
 movies_to_be_rated = (
     ratings.filter(~ f.col('movieId').isin(ratedMovies))
-    .select('movieId').distinct().withColumn('userId',f.lit(1))
+    .select('movieId').distinct().withColumn('userId',f.lit(10))
 )
-# movies_to_be_rated.show()
 user_movie_predictions = model.transform(movies_to_be_rated)
-# user_movie_predictions=user_movie_predictions.filter(~f.isnan('prediction')).orderBy('prediction',ascending=False).show(5)
 movierecomment=user_movie_predictions.select('movieId').distinct()
-#result = movierecomment.to_json(orient="split")
-#print(result)
+result = user_movie_predictions.filter(
+    ~f.isnan('prediction')).orderBy('prediction', ascending=False).limit(5).join(links,['movieId'],'left')
+print(json.dumps(result.select('movieId','prediction','tmdbId').toPandas().to_dict('list')))
+
+
+
+
+# df = result.toPandas()
+# result = df.to_json(orient="values")
+# parsed = json.loads(result)
+# print(parsed)
+
+
