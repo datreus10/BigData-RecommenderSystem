@@ -43,7 +43,7 @@ ratedMovies = ratings.filter(f.col('userId') == userId).select(
 
 movies_to_be_rated = (
     ratings.filter(~ f.col('movieId').isin(ratedMovies))
-    .select('movieId').distinct().withColumn('userId', f.lit(1))
+    .select('movieId').distinct().withColumn('userId', f.lit(int(userId)))
 )
 
 user_movie_predictions = model.transform(movies_to_be_rated)

@@ -10,29 +10,29 @@ const testMovies = [
 ];
 
 const getHomePage = (req, res, next) => {
-  // const userId = 1;
+  const userId = req.query.userId;
 
-  // let result;
+  let result;
 
-  // const python = spawn("python3", ["./recommendation/loadRec.py", userId]);
-  // // collect data from script
-  // python.stdout.on("data", function (data) {
-  //   result = data.toString();
-  // });
-  // // in close event we are sure that stream from child process is closed
-  // python.on("close", async (code) => {
-  //   result = JSON.parse(result);
+  const python = spawn("python3", ["./recommendation/loadRec.py", userId]);
+  // collect data from script
+  python.stdout.on("data", function (data) {
+    result = data.toString();
+  });
+  // in close event we are sure that stream from child process is closed
+  python.on("close", async (code) => {
+    result = JSON.parse(result);
 
-  //   res.render("index", {
-  //     movies: await movieAPI.getMoviesById(result["tmdbId"]),
-  //     recommend: result,
-  //     user: req.user,
-  //   });
-  // });
     res.render("index", {
-      movies: testMovies,
+      movies: await movieAPI.getMoviesById(result["tmdbId"]),
+      recommend: result,
       user: req.user,
     });
+  });
+    // res.render("index", {
+    //   movies: testMovies,
+    //   user: req.user,
+    // });
 };
 
 module.exports = {

@@ -69,7 +69,7 @@
 						<% movies.forEach(movie => { %>
 						<div class="item">
 							<!-- card -->
-							<%- include('components/home/bigCard'); %>
+							<%- include('components/home/bigCard',{movie:movie}); %>
 							<!-- end card -->
 						</div>
 						<% }) %>
