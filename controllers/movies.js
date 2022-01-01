@@ -1,39 +1,28 @@
+const movieAPI = require("../helper/movieAPI");
+const { spawn } = require("child_process");
+
 const categorytemp = ['Action/Adventure', 'Kids & Family', 'Medical', 'Military/War', 'Music,Musical', 'Mystery/Crime', 'Nature', 'Paranormal', 'Politics', 'Racing', 'Romance', 'Science', 'ScienceFiction', 'Science/Nature', 'Spanish', 'Travel', 'Western']
 
-const listmovie = [{
-  name: 'Fast and furious 7',
-  star: '10'
-}, {
-  name: 'John Wick 3',
-  star: '10'
-}, {
-  name: 'John Cenna',
-  star: '10'
-}, {
-  name: 'Fast and furious 7',
-  star: '10'
-}, {
-  name: 'John Wick 3',
-  star: '10'
-}, {
-  name: 'John Cenna',
-  star: '10'
-}, {
-  name: 'Fast and furious 7',
-  star: '10'
-}, {
-  name: 'John Wick 3',
-  star: '10'
-}, {
-  name: 'John Cenna',
-  star: '10'
-}]
-
 const getmoviespage = (req, res, next) => {
-  res.render("movies", {
-    category: categorytemp,
-    movies: listmovie,
-    user: req.user
+  const userId = 99;
+  let recommendation;
+  let listmovies;
+  let recommendmovies;
+
+  const python = spawn("python3", ["./recommendation/test.py", userId]);
+  python.stdout.on("data", function (data) {
+    recommendation += data.toString();
+  });
+  
+  python.on("close", async (code) => {
+    recommendation=recommendation.substring(recommendation.indexOf('{'), recommendation.indexOf('}')+1)
+    recommendation = JSON.parse(recommendation);
+    res.render("movies", {
+      category: categorytemp,
+      movies: await movieAPI.getMoviesById(recommendation["tmdbId"]),
+      recommendmovies: await movieAPI.getMoviesById(recommendation["tmdbId"].splice(0,5)),
+      user: req.user
+    });
   });
 };
 

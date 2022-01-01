@@ -39,19 +39,18 @@ links = (
 )
 
 
+id = int(sys.argv[1])
 
-ratedMovies = ratings.filter(f.col('userId')==10).select('movieId').rdd.flatMap(lambda x:x).collect()
+ratedMovies = ratings.filter(f.col('userId')==id).select('movieId').rdd.flatMap(lambda x:x).collect()
 movies_to_be_rated = (
-    ratings.filter(~ f.col('movieId').isin(ratedMovies))
-    .select('movieId').distinct().withColumn('userId',f.lit(10))
+ratings.filter(~ f.col('movieId').isin(ratedMovies))
+.select('movieId').distinct().withColumn('userId',f.lit(id))
 )
 user_movie_predictions = model.transform(movies_to_be_rated)
 movierecomment=user_movie_predictions.select('movieId').distinct()
 result = user_movie_predictions.filter(
-    ~f.isnan('prediction')).orderBy('prediction', ascending=False).limit(5).join(links,['movieId'],'left')
+    ~f.isnan('prediction')).orderBy('prediction', ascending=False).limit(100).join(links,['movieId'],'left')
 print(json.dumps(result.select('movieId','prediction','tmdbId').toPandas().to_dict('list')))
-
-
 
 
 # df = result.toPandas()
