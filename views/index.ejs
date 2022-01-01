@@ -54,7 +54,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
-					<h1 class="home__title"><b>RECOMMEND MOVIES</b> FOR YOU</h1>
+					<h1 class="home__title"><b>NEW MOVIES</b> FOR YOU</h1>
 
 					<button class="home__nav home__nav--prev" type="button">
 						<i class="icon ion-ios-arrow-round-back"></i>
@@ -131,8 +131,7 @@
 						<% movies.forEach(movie => { %>
 						<!-- card -->
 						<div class="col-6 col-sm-12 col-lg-6">
-
-							<%- include('components/home/infoCard'); %>
+							<%- include('components/home/infoCard',{movie:movie}); %>
 						</div>
 						<!-- end card -->
 						<% }) %>
@@ -161,7 +160,7 @@
 				<!-- card -->
 				<div class="col-6 col-sm-4 col-lg-3 col-xl-2">
 
-					<%- include('components/home/normalCard') %>
+					<%- include('components/home/normalCard',{movie:movie}) %>
 				</div>
 				<!-- end card -->
 				<% }) %>

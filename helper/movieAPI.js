@@ -25,26 +25,20 @@ const searchByNameAndYear = async (movieName, year) => {
   }
 };
 
-const getMoviesById = async(lstId) => {
-  try {
-    const result = [];
-    for (let i = 0; i < lstId.length; i++) {
-      const id = lstId[i];
-      if(id===null) continue;
-      const response = await axios.get(
-        baseURL + `/movie/${id}?api_key=` + API_KEY
-      ).catch(err =>{
-        console.log("err"+err);
-      });
-      if(response === undefined) {
-        continue;
-      }
-      result.push(response.data);
-    }
-    return result;
-  } catch (error) {
-    console.error("the error is " + error);
-  }
+const getMoviesById = (listId) => {
+  return Promise.all(
+    listId.map((id) =>
+      axios
+        .get(baseURL + `/movie/${id}?api_key=` + API_KEY)
+        .then((response) => {
+          return response.status == 200 ? response.data : false;
+        })
+        .catch((error) => {
+          //console.log(error);
+          return false;
+        })
+    )
+  ).then((data) => data.filter((e) => e));
 };
 
 module.exports = {
