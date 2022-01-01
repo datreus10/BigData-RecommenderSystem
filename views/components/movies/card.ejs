@@ -1,0 +1,39 @@
+<div class="card card--list">
+    <div class="row">
+        <div class="col-12 col-sm-4">
+            <div class="card__cover">
+                <img src="https://image.tmdb.org/t/p/w500<%= movie.poster_path %>" alt="">
+                <a href="/movies/detail" class="card__play">
+                    <i class="icon ion-ios-play"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-8">
+            <div class="card__content">
+                <h3 class="card__title"><a href="/movies/detail">
+                        <%= movie.title %>
+                    </a></h3>
+                <span class="card__category">
+                    <%movie.genres.forEach(genre =>{%>                       
+                        <a href="#"><%=genre.name%></a>
+                    <%})%>
+                </span>
+                
+                <div class="card__wrap">
+                    <span class="card__rate"><i class="icon ion-ios-star"></i>
+                        <%=movie.vote_average/2%>
+                    </span>
+                    <ul class="card__list">
+                        <li>HD</li>
+                        <li>16+</li>
+                    </ul>
+                </div>
+
+                <div class="card__description">
+                    <p><%=movie.overview%></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

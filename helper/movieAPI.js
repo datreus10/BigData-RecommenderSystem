@@ -30,14 +30,20 @@ const getMoviesById = async(lstId) => {
     const result = [];
     for (let i = 0; i < lstId.length; i++) {
       const id = lstId[i];
+      if(id===null) continue;
       const response = await axios.get(
         baseURL + `/movie/${id}?api_key=` + API_KEY
-      );
+      ).catch(err =>{
+        console.log("err"+err);
+      });
+      if(response === undefined) {
+        continue;
+      }
       result.push(response.data);
     }
     return result;
   } catch (error) {
-    console.error(error);
+    console.error("the error is " + error);
   }
 };
 

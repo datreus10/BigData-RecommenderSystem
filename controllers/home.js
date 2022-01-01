@@ -10,19 +10,19 @@ const testMovies = [
 ];
 
 const getHomePage = (req, res, next) => {
-  const userId = req.query.userId;
+  const id = 15;
 
   let result;
 
-  const python = spawn("python3", ["./recommendation/loadRec.py", userId]);
+  const python = spawn("python3", ["./recommendation/test.py", id]);
   // collect data from script
   python.stdout.on("data", function (data) {
-    result = data.toString();
+    result += data.toString();
   });
   // in close event we are sure that stream from child process is closed
   python.on("close", async (code) => {
+    result=result.substring(result.indexOf('{'), result.indexOf('}')+1)
     result = JSON.parse(result);
-
     res.render("index", {
       movies: await movieAPI.getMoviesById(result["tmdbId"]),
       recommend: result,
