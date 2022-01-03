@@ -6,7 +6,7 @@ import sys
 from pyspark.ml.recommendation import ALS, ALSModel
 from pyspark.sql import functions as f
 from pyspark.sql import SparkSession
-from pyspark.mllib.recommendation import ALS, MatrixFactorizationModel, Rating
+from pyspark.ml.recommendation import ALS
 from datetime import datetime
 
 
@@ -18,7 +18,7 @@ try:
         .config("spark.driver.memory", "5g") \
         .appName('movieRecommendationPySpark') \
         .getOrCreate()
-    model = ALSModel.load("./recommendation/modelRecBest")
+
     userId = int(sys.argv[1])
     listmovie = sys.argv[2]
     listmovieid = listmovie.split(',')
@@ -28,7 +28,7 @@ try:
     timestamp = datetime.timestamp(now)
     with open("./data/ml-25m/ratings.csv", 'a+') as file:
         for i in range(0, len(listmovieid)):
-            file.write('\n'+str(userId)+','+str(listmovieid[i])+','+str(listrating[i])+','+str(timestamp))
+            file.write('\n'+str(userId)+','+str(listmovieid[i])+','+str(listrating[i])+','+str(int(timestamp)))
         file.close()
     ratings = (
         spark.read.csv(
@@ -43,6 +43,17 @@ try:
             sep=",", header=True, quote='"', schema="movieId INT, imdbId STRING, tmdbId STRING",
         ).select("movieId", "tmdbId")
     )
+
+    als = ALS(
+        userCol ="userId",
+        itemCol ="movieId",
+        ratingCol = "rating",
+    )
+    (training_data, validation_data) = ratings.randomSplit([8.0,2.0])
+    model = als.fit(training_data)
+
+
+
     ratedMovies = ratings.filter(f.col('userId') == userId).select(
         'movieId').rdd.flatMap(lambda x: x).collect()
 

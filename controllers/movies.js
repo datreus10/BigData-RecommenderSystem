@@ -155,7 +155,7 @@ const postrating = async (req, res, next) => {
   });
   python.on("close", async (code) => {
     try {
-      console.log(strData);
+      // console.log(strData);
       const idx1 = strData.indexOf("{");
       const idx2 = strData.indexOf("}");
       if (idx1 > -1 && idx2 > -1) {
@@ -169,7 +169,7 @@ const postrating = async (req, res, next) => {
             tmdbId: recMovies["tmdbId"][i],
             movieId: recMovies["movieId"][i]
           })
-          console.log(movie);
+          // console.log(movie);
           await movie.save();
         }
       }
