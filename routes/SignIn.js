@@ -6,6 +6,7 @@ router.get('/',(req,res) => {
     res.render('signin');
 }) 
 router.post('/',accessToken,async (req,res)=>{
+
         res.redirect('/')
 })
 module.exports = router;

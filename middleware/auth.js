@@ -44,6 +44,9 @@ const accessToken = async function(req,res,next){
     }
    
 }
+const checkuser = async (req,res,next) => {
+    
+}
 module.exports={
     verifytoken,
     accessToken,

@@ -8,10 +8,13 @@ router.post('/',async (req,res)=>{
     try{
         var body = req.body;
         checkUser = await User.find({Email: body.Email})
+        numUser = await User.find();
+        console.log(numUser);
         if(checkUser.length > 0){
             res.redirect('/signup')
         }else{
             var user = new User({
+                id: numUser.length +1000000,
                 Name: body.Name,
                 Email: body.Email,
                 Password: body.Password

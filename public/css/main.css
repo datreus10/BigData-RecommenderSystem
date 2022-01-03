@@ -86,7 +86,7 @@ a:focus {
   text-decoration: none;
 }
 
-input,
+input:not(.ratingmovie),
 textarea,
 select {
   padding: 0;
