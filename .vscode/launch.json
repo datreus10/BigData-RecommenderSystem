@@ -11,6 +11,12 @@
         "processId": "${command:PickProcess}",
         "restart": true,
         "protocol": "inspector"
-      }
+      },{
+        "name": "Python: Module",
+        "type": "python",
+        "request": "launch",
+        "module": "uvicorn",
+        "args": ["recommendApi.server:app","--reload"]
+    }
     ]
   }
