@@ -2,7 +2,6 @@ from pyspark.ml.recommendation import ALS
 from pyspark.sql import functions as f
 
 
-
 class RecommendationEngine:
 
     def __init__(self, spark, dataset_path):
@@ -24,10 +23,10 @@ class RecommendationEngine:
             .cache()
         )
 
-        self.__train_model()
+        self.train_model()
 
 
-    def __train_model(self):
+    def train_model(self):
         als = ALS(
             userCol="userId",
             itemCol="movieId",
@@ -52,4 +51,6 @@ class RecommendationEngine:
             ~f.isnan('prediction')).orderBy('prediction', ascending=False).limit(limit).join(self.linkData, ['movieId'], 'left')
 
         return result.select('movieId', 'prediction','tmdbId').toPandas().to_dict('list')
+
+
 

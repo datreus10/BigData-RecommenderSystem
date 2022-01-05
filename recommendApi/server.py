@@ -1,13 +1,13 @@
 import findspark
 findspark.init()
 
+from model import Rating
 from recEngine import RecommendationEngine
-from pyspark.ml.recommendation import ALS, ALSModel
+from data import Data
 from pyspark.sql import functions as f
 from pyspark.sql import SparkSession
-from pyspark.ml.recommendation import ALS
-from datetime import datetime
 from fastapi import FastAPI
+from typing import List
 import uvicorn
 
 
@@ -37,6 +37,17 @@ def getRec(userId: int = 1, limit: int = 50):
     if not recEngine:
         recEngine = RecommendationEngine(spark, "./data/ml-25m")
     return recEngine.getRatingForUser(userId, limit)
+
+@app.post("/movie/rating")
+def addRating(listRating:List[Rating]):
+    dataset = Data()
+    dataset.addRating(listRating)
+    global recEngine
+    if not recEngine:
+        recEngine = RecommendationEngine(spark, "./data/ml-25m")
+    else:
+        recEngine.train_model()
+    return {"Hello":"World"}
 
 
 if __name__ == "__main__":
