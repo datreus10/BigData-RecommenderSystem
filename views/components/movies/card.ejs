@@ -15,7 +15,7 @@
                         <%= movie.title %>
                     </a></h3>
                 <span class="card__category">
-                    <%movie.genres.forEach(genre =>{%>                       
+                    <%movie.genres && movie.genres.forEach(genre =>{%>                       
                         <a href="#"><%=genre.name%></a>
                     <%})%>
                 </span>

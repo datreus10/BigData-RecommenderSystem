@@ -20,18 +20,12 @@
 
                             <!-- dropdown -->
                             <li class="header__nav-item">
-                                <a class="header__nav-link" href="/movies" role="button" id="dropdownMenuCatalog">Catalog</a>
+                                <a class="header__nav-link" href="/movies" role="button" id="dropdownMenuCatalog">Movies</a>
                             </li>
                             <!-- end dropdown -->
-
                             <li class="header__nav-item">
-                                <a href="pricing.html" class="header__nav-link">Pricing Plan</a>
+                                <a href="/about" class="header__nav-link">About</a>
                             </li>
-
-                            <li class="header__nav-item">
-                                <a href="faq.html" class="header__nav-link">Help</a>
-                            </li>
-
                             <!-- dropdown -->
                             <li class="dropdown header__nav-item">
                                 <a class="dropdown-toggle header__nav-link header__nav-link--more" href="#"
@@ -39,23 +33,22 @@
                                     aria-expanded="false"><i class="icon ion-ios-more"></i></a>
 
                                 <ul class="dropdown-menu header__dropdown-menu" aria-labelledby="dropdownMenuMore">
-                                    <li><a href="about.html">About</a></li>
                                     <li><a href="/signin">Sign In</a></li>
                                     <li><a href="/signup">Sign Up</a></li>
-                                    <li><a href="/asd">404 Page</a></li>
                                 </ul>
                             </li>
                             <!-- end dropdown -->
                         </ul>
                         <!-- end header nav -->
-
                         <!-- header auth -->
                         <%if(!user){%>
                         <div class="header__auth">
                             <button class="header__search-btn" type="button">
                                 <i class="icon ion-ios-search"></i>
                             </button>
-
+                            <div style="margin-left: 40px;">
+                                <a href="/about" class="header__nav-link"></a>
+                            </div>
                             <a href="/signin" class="header__sign-in">
                                 <i class="icon ion-ios-log-in"></i>
                                 <span>sign in</span>
@@ -68,7 +61,9 @@
                             <button class="header__search-btn" type="button">
                                 <i class="icon ion-ios-search"></i>
                             </button>
-
+                            <div style="margin-left: 40px;">
+                                <a href="/about" class="header__nav-link"> <%=user.Name%></a>
+                            </div>
                             <a href="/logout" class="header__sign-in">
                                 <i class="icon ion-ios-log-in"></i>
                                 <span>Logout</span>
@@ -91,14 +86,14 @@
     </div>
 
     <!-- header search -->
-    <form action="#" class="header__search">
+    <form action="/movies/search" method="post" class="header__search">
         <div class="container">
             <div class="row">
                 <div class="col-12">
                     <div class="header__search-content">
-                        <input type="text" placeholder="Search for a movie, TV Series that you are looking for">
+                        <input type="text" placeholder="Search for a movie, TV Series that you are looking for" name="keywords">
 
-                        <button type="button">search</button>
+                        <button type="submit">search</button>
                     </div>
                 </div>
             </div>

@@ -12,11 +12,11 @@ const splitMovieNameAndYear = (txtName) => {
   };
 };
 
-const searchByNameAndYear = async (movieName, year) => {
+const searchByName = async (movieName) => {
   try {
     const response = await axios.get(
       baseURL +
-        `search/movie?query=${movieName}&year=${year}&api_key=` +
+        `search/movie?query=${movieName}&api_key=` +
         API_KEY
     );
     return response.data;
@@ -43,6 +43,6 @@ const getMoviesById = (listId) => {
 
 module.exports = {
   getMoviesById,
-  searchByNameAndYear,
+  searchByName,
   splitMovieNameAndYear,
 };

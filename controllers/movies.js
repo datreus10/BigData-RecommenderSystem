@@ -7,7 +7,7 @@ const getmoviespage = async (req, res, next) => {
   const user = req.user;
   let userId = user.id;
   let recMovies=[];
-  if(userId!='') {
+  if(userId!=null) {
     let recommendmovie = await Movie.find({ userId })
     if (recommendmovie !== null && recommendmovie.length > 0) {
       recMovies = recommendmovie.map(movie => movie.tmdbId);
@@ -115,8 +115,26 @@ const reviewMovie = (req, res, next) => {
   }
 };
 
-const search = (req, res, next) => {
-  res.send(req.body);
+const search = async (req, res, next) => {
+  let listmovie = await movieAPI.searchByName(req.body.keywords);
+  res.render("movies", {
+    movies: listmovie.results,
+    recommendmovies: [],
+    user: req.user
+  });
+};
+const getsearch = async (req, res, next) => {
+  let recMovies=[];
+  for(let i=0;i<100;i++)
+    {
+      recMovies.push((Math.floor(Math.random() * 1000)))
+    }
+  let fetchMovies = await movieAPI.getMoviesById(recMovies);
+  res.render("movies", {
+    movies: fetchMovies,
+    recommendmovies: [],
+    user: req.user
+  });
 };
 
 const filter = (req, res, next) => {
@@ -189,4 +207,5 @@ module.exports = {
   reviewMovie,
   getrating,
   postrating,
+  getsearch,
 };
