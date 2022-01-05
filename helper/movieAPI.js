@@ -41,8 +41,20 @@ const getMoviesById = (listId) => {
   ).then((data) => data.filter((e) => e));
 };
 
+const getGenres = async () => {
+  try {
+    const response = await axios.get(
+      "https://api.themoviedb.org/3/genre/movie/list?api_key=7e45a30bcb576d87b9f1c53ca284faf0"
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   getMoviesById,
   searchByName,
   splitMovieNameAndYear,
+  getGenres,
 };

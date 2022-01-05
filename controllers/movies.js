@@ -1,13 +1,14 @@
 const movieAPI = require("../helper/movieAPI");
 const { spawn } = require("child_process");
 var Movie = require("../models/movie");
+const { type } = require("express/lib/response");
 
 
 const getmoviespage = async (req, res, next) => {
   const user = req.user;
   let userId = user.id;
-  let recMovies=[];
-  if(userId!=null) {
+  let recMovies = [];
+  if (userId != null) {
     let recommendmovie = await Movie.find({ userId })
     if (recommendmovie !== null && recommendmovie.length > 0) {
       recMovies = recommendmovie.map(movie => movie.tmdbId);
@@ -22,14 +23,12 @@ const getmoviespage = async (req, res, next) => {
       res.redirect('movies/rating');
     }
   }
-  else
-  {
-    for(let i=0;i<100;i++)
-    {
+  else {
+    for (let i = 0; i < 100; i++) {
       recMovies.push((Math.floor(Math.random() * 1000)))
     }
     let fetchMovies = await movieAPI.getMoviesById(recMovies);
-    let sorted=fetchMovies.sort((a,b) => b.vote_average-a.vote_average);
+    let sorted = fetchMovies.sort((a, b) => b.vote_average - a.vote_average);
     res.render("movies", {
       movies: sorted,
       recommendmovies: sorted.slice(0, 5),
@@ -116,32 +115,50 @@ const reviewMovie = (req, res, next) => {
 };
 
 const search = async (req, res, next) => {
-  let listmovie = await movieAPI.searchByName(req.body.keywords);
-  res.render("movies", {
-    movies: listmovie.results,
-    recommendmovies: [],
-    user: req.user
-  });
-};
-const getsearch = async (req, res, next) => {
-  let recMovies=[];
-  for(let i=0;i<100;i++)
+  let listgen = await movieAPI.getGenres();
+  let listmovie = []
+  if(req.body.keywords!=null){
+    listmovie = await movieAPI.searchByName(req.body.keywords);
+    listmovie.results.forEach(movie => {
+      movie.genres = movie.genre_ids.map(
+        genre => {
+          return listgen.genres.filter(a => a.id == genre)[0]
+        })
+    })
+    res.render("movies", {
+      movies: listmovie.results,
+      recommendmovies: [],
+      user: req.user
+    });
+  }
+  else
+  {
+    let listid = [];
+    for (let i = 0 ; i<1000;i++)
     {
-      recMovies.push((Math.floor(Math.random() * 1000)))
+      listid.push(i)
     }
-  let fetchMovies = await movieAPI.getMoviesById(recMovies);
-  res.render("movies", {
-    movies: fetchMovies,
-    recommendmovies: [],
-    user: req.user
-  });
+    listmovie = await movieAPI.getMoviesById(listid);
+    let {
+        type, starbegin, starend, yearbegin, yearend
+      } = req.body
+      listmovie = listmovie.filter(movie => {
+        let year = movie.release_date.split('-')[0];
+        let gen = movie.genres.filter(a=>a.name==type)
+        let star = movie.vote_average / 2;
+        return gen.length != 0 && star > starbegin && star < starend && year > yearbegin && year < yearend;
+      })
+      res.render("movies", {
+        movies: listmovie,
+        recommendmovies: [],
+        user: req.user
+      });
+  }
+  
 };
 
-const filter = (req, res, next) => {
-  res.send(req.body);
-};
 
-const getrating = async (req, res, next) => { 
+const getrating = async (req, res, next) => {
   let listmovie = [];
   for (let i = 0; i < 10; i++) {
     listmovie.push(Math.floor(Math.random() * 1000));
@@ -202,10 +219,8 @@ const postrating = async (req, res, next) => {
 module.exports = {
   getmoviespage,
   search,
-  filter,
   detailMovie,
   reviewMovie,
   getrating,
   postrating,
-  getsearch,
 };
