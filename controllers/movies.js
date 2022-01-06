@@ -1,6 +1,7 @@
 const movieAPI = require("../helper/movieAPI");
 const recAPI = require("../helper/recAPI");
 var Movie = require("../models/movie");
+const { type } = require("express/lib/response");
 
 const getmoviespage = async (req, res, next) => {
   const userId = req.user.id;
@@ -100,29 +101,48 @@ const reviewMovie = (req, res, next) => {
 };
 
 const search = async (req, res, next) => {
-  let listmovie = await movieAPI.searchByName(req.body.keywords);
-  res.render("movies", {
-    movies: listmovie.results,
-    recommendmovies: [],
-    user: req.user,
-  });
-};
-const getsearch = async (req, res, next) => {
-  let recMovies = [];
-  for (let i = 0; i < 100; i++) {
-    recMovies.push(Math.floor(Math.random() * 1000));
+  let listgen = await movieAPI.getGenres();
+  let listmovie = []
+  if(req.body.keywords!=null){
+    listmovie = await movieAPI.searchByName(req.body.keywords);
+    listmovie.results.forEach(movie => {
+      movie.genres = movie.genre_ids.map(
+        genre => {
+          return listgen.genres.filter(a => a.id == genre)[0]
+        })
+    })
+    res.render("movies", {
+      movies: listmovie.results,
+      recommendmovies: [],
+      user: req.user
+    });
   }
-  let fetchMovies = await movieAPI.getMoviesById(recMovies);
-  res.render("movies", {
-    movies: fetchMovies,
-    recommendmovies: [],
-    user: req.user,
-  });
+  else
+  {
+    let listid = [];
+    for (let i = 0 ; i<1000;i++)
+    {
+      listid.push(i)
+    }
+    listmovie = await movieAPI.getMoviesById(listid);
+    let {
+        type, starbegin, starend, yearbegin, yearend
+      } = req.body
+      listmovie = listmovie.filter(movie => {
+        let year = movie.release_date.split('-')[0];
+        let gen = movie.genres.filter(a=>a.name==type)
+        let star = movie.vote_average / 2;
+        return gen.length != 0 && star > starbegin && star < starend && year > yearbegin && year < yearend;
+      })
+      res.render("movies", {
+        movies: listmovie,
+        recommendmovies: [],
+        user: req.user
+      });
+  }
+  
 };
 
-const filter = (req, res, next) => {
-  res.send(req.body);
-};
 
 const getrating = async (req, res, next) => {
   let listmovie = [];
@@ -170,10 +190,8 @@ const postrating = async (req, res, next) => {
 module.exports = {
   getmoviespage,
   search,
-  filter,
   detailMovie,
   reviewMovie,
   getrating,
   postrating,
-  getsearch,
 };

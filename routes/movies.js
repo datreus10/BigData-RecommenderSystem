@@ -3,12 +3,10 @@ var router = express.Router();
 var {
     getmoviespage,
     search,
-    filter,
     detailMovie,
     reviewMovie,
     getrating,
     postrating,
-    getsearch,
 } = require('../controllers/movies');
 const {verifytoken} = require('../middleware/auth')
 
@@ -18,9 +16,7 @@ router.get('/rating',verifytoken, getrating);
 router.post('/rating',verifytoken, postrating);
 router.get('/detail',verifytoken, detailMovie);
 router.post('/review',verifytoken, reviewMovie);
-router.post('/search',verifytoken, search);
-router.post('/filter',verifytoken, filter);
-router.get('/search',verifytoken, getsearch);
+router.post('/',verifytoken, search);
 
 
 module.exports = router;
