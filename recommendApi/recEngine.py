@@ -2,6 +2,7 @@ from pyspark.ml.recommendation import ALS
 from pyspark.sql import functions as f
 
 
+
 class RecommendationEngine:
 
     def __init__(self, spark, dataset_path):
@@ -25,7 +26,6 @@ class RecommendationEngine:
 
         self.train_model()
 
-
     def train_model(self):
         als = ALS(
             userCol="userId",
@@ -36,8 +36,7 @@ class RecommendationEngine:
             [8.0, 2.0])
         self.model = als.fit(training_data)
 
-
-    def getRatingForUser(self, userId,limit):
+    def getRatingForUser(self, userId, limit):
         ratedMovies = self.ratingData.filter(f.col('userId') == userId).select(
             'movieId').rdd.flatMap(lambda x: x).collect()
 
@@ -48,9 +47,13 @@ class RecommendationEngine:
 
         user_movie_predictions = self.model.transform(movies_to_be_rated)
         result = user_movie_predictions.filter(
-            ~f.isnan('prediction')).orderBy('prediction', ascending=False).limit(limit).join(self.linkData, ['movieId'], 'left')
+            ~f.isnan('prediction') & (user_movie_predictions.prediction <= 5)).orderBy('prediction', ascending=False).limit(limit).join(self.linkData, ['movieId'], 'left')
 
-        return result.select('movieId', 'prediction','tmdbId').toPandas().to_dict('list')
+        return result.select('movieId', 'prediction', 'tmdbId').toPandas().to_dict('list')
 
+    def getRandomMovie(self, number):
+        return self.linkData.orderBy(f.rand()).limit(number).toPandas().to_dict('list')
+        #return self.linkData.sample(withReplacement=False, fraction=0.8).limit(number).toPandas().to_dict('list')
 
-
+    def convertToTmdbId(self, listMovieId):
+        return self.linkData.filter(self.linkData.movieId.isin(listMovieId)).toPandas().to_dict('list')

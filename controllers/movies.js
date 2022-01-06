@@ -22,10 +22,8 @@ const getmoviespage = async (req, res, next) => {
       res.redirect("movies/rating");
     }
   } else {
-    for (let i = 0; i < 100; i++) {
-      recMovies.push(Math.floor(Math.random() * 1000));
-    }
-    let fetchMovies = await movieAPI.getMoviesById(recMovies);
+    const listId = (await recAPI.getRandomMovies(50))["tmdbId"];
+    let fetchMovies = await movieAPI.getMoviesById(listId);
     let sorted = fetchMovies.sort((a, b) => b.vote_average - a.vote_average);
     res.render("movies", {
       movies: sorted,
@@ -64,10 +62,22 @@ const getmoviespage = async (req, res, next) => {
   // }
 };
 
-const detailMovie = (req, res, next) => {
+const detailMovie = async (req, res, next) => {
+  const cacheMovies = await Movie.findOne({
+    userId: req.user.id,
+  });
+
+  let listId;
+  if (cacheMovies)
+    listId = cacheMovies.recMovies.slice(0, 5).map((e) => e.tmdbId);
+  else listId = (await recAPI.getRandomMovies(5))["tmdbId"];
+
+  const recMovies = await movieAPI.getMoviesById(listId);
+  const movieDetail = await movieAPI.getMoviesById([req.query.tmdbId]);
   res.render("detail", {
     user: req.user,
-    recMovies: [1, 2, 3, 4, 5],
+    movie: movieDetail[0],
+    recMovies: recMovies,
   });
 };
 
@@ -102,47 +112,45 @@ const reviewMovie = (req, res, next) => {
 
 const search = async (req, res, next) => {
   let listgen = await movieAPI.getGenres();
-  let listmovie = []
-  if(req.body.keywords!=null){
+  let listmovie = [];
+  if (req.body.keywords != null) {
     listmovie = await movieAPI.searchByName(req.body.keywords);
-    listmovie.results.forEach(movie => {
-      movie.genres = movie.genre_ids.map(
-        genre => {
-          return listgen.genres.filter(a => a.id == genre)[0]
-        })
-    })
+    listmovie.results.forEach((movie) => {
+      movie.genres = movie.genre_ids.map((genre) => {
+        return listgen.genres.filter((a) => a.id == genre)[0];
+      });
+    });
     res.render("movies", {
       movies: listmovie.results,
       recommendmovies: [],
-      user: req.user
+      user: req.user,
     });
-  }
-  else
-  {
+  } else {
     let listid = [];
-    for (let i = 0 ; i<1000;i++)
-    {
-      listid.push(i)
+    for (let i = 0; i < 1000; i++) {
+      listid.push(i);
     }
     listmovie = await movieAPI.getMoviesById(listid);
-    let {
-        type, starbegin, starend, yearbegin, yearend
-      } = req.body
-      listmovie = listmovie.filter(movie => {
-        let year = movie.release_date.split('-')[0];
-        let gen = movie.genres.filter(a=>a.name==type)
-        let star = movie.vote_average / 2;
-        return gen.length != 0 && star > starbegin && star < starend && year > yearbegin && year < yearend;
-      })
-      res.render("movies", {
-        movies: listmovie,
-        recommendmovies: [],
-        user: req.user
-      });
+    let { type, starbegin, starend, yearbegin, yearend } = req.body;
+    listmovie = listmovie.filter((movie) => {
+      let year = movie.release_date.split("-")[0];
+      let gen = movie.genres.filter((a) => a.name == type);
+      let star = movie.vote_average / 2;
+      return (
+        gen.length != 0 &&
+        star > starbegin &&
+        star < starend &&
+        year > yearbegin &&
+        year < yearend
+      );
+    });
+    res.render("movies", {
+      movies: listmovie,
+      recommendmovies: [],
+      user: req.user,
+    });
   }
-  
 };
-
 
 const getrating = async (req, res, next) => {
   let listmovie = [];

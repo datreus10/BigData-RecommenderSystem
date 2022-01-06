@@ -29,7 +29,7 @@ const getMoviesById = (listId) => {
   return Promise.all(
     listId.map((id) =>
       axios
-        .get(baseURL + `/movie/${id}?api_key=` + API_KEY)
+        .get(baseURL + `/movie/${id}?append_to_response=videos&api_key=` + API_KEY)
         .then((response) => {
           return response.status == 200 ? response.data : false;
         })

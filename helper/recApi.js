@@ -22,4 +22,29 @@ const recMovieForUser = (userId, limit = 50) => {
     });
 };
 
-module.exports = { postRating, recMovieForUser };
+const convertToTmdbId = (listMovieId) => {
+  return axios
+    .post(baseURL + `/to_tmdbID`, listMovieId)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.log(err);
+      return "error";
+    });
+};
+
+const getRandomMovies = (limit) => {
+  return axios
+    .get(baseURL + `/movie/random?limit=${limit}`)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.log(err);
+      return "error";
+    });
+};
+
+module.exports = {
+  postRating,
+  recMovieForUser,
+  convertToTmdbId,
+  getRandomMovies,
+};
