@@ -3,14 +3,15 @@ const recAPI = require("../helper/recAPI");
 var Movie = require("../models/movie");
 
 const getmoviespage = async (req, res, next) => {
-  const user = req.user;
-  let userId = user.id;
-  let recMovies = [];
-  if (userId != null) {
-    let recommendmovie = await Movie.find({ userId });
-    if (recommendmovie !== null && recommendmovie.length > 0) {
-      recMovies = recommendmovie.map((movie) => movie.tmdbId);
-      const fetchMovies = await movieAPI.getMoviesById(recMovies);
+  const userId = req.user.id;
+  if (userId) {
+    const cacheMovies = await Movie.findOne({
+      userId: userId,
+    });
+    if (cacheMovies) {
+      const fetchMovies = await movieAPI.getMoviesById(
+        cacheMovies.recMovies.map((e) => e.tmdbId)
+      );
       res.render("movies", {
         movies: fetchMovies,
         recommendmovies: fetchMovies.slice(0, 5),
@@ -31,6 +32,35 @@ const getmoviespage = async (req, res, next) => {
       user: req.user,
     });
   }
+
+  // const user = req.user;
+  // let userId = user.id;
+  // let recMovies = [];
+  // if (userId != null) {
+  //   let recommendmovie = await Movie.find({ userId });
+  //   if (recommendmovie !== null && recommendmovie.length > 0) {
+  //     recMovies = recommendmovie.map((movie) => movie.tmdbId);
+  //     const fetchMovies = await movieAPI.getMoviesById(recMovies);
+  //     res.render("movies", {
+  //       movies: fetchMovies,
+  //       recommendmovies: fetchMovies.slice(0, 5),
+  //       user: req.user,
+  //     });
+  //   } else {
+  //     res.redirect("movies/rating");
+  //   }
+  // } else {
+  //   for (let i = 0; i < 100; i++) {
+  //     recMovies.push(Math.floor(Math.random() * 1000));
+  //   }
+  //   let fetchMovies = await movieAPI.getMoviesById(recMovies);
+  //   let sorted = fetchMovies.sort((a, b) => b.vote_average - a.vote_average);
+  //   res.render("movies", {
+  //     movies: sorted,
+  //     recommendmovies: sorted.slice(0, 5),
+  //     user: req.user,
+  //   });
+  // }
 };
 
 const detailMovie = (req, res, next) => {
@@ -104,19 +134,34 @@ const getrating = async (req, res, next) => {
     user: req.user,
   });
 };
+
 const postrating = async (req, res, next) => {
   const postData = [];
+  const userId = req.user.id;
   for (const property in req.body) {
     const tmp = req.body[property].split(" ");
     postData.push({
-      userId: req.user.id,
+      userId: userId,
       movieId: tmp[0],
       rating: tmp[1],
     });
   }
-  const result = await recAPI.postRating(postData);
-  if (result) {
-    res.send(result);
+  const postRes = await recAPI.postRating(postData);
+  console.log(postRes);
+  if (postRes) {
+    const recMovies = await recAPI.recMovieForUser(userId);
+    const movie = {
+      userId: userId,
+      recMovies: recMovies["movieId"].map((e, i) => {
+        return {
+          movieId: e,
+          tmdbId: recMovies["tmdbId"][i],
+        };
+      }),
+    };
+    const filter = { userId: userId };
+    await Movie.findOneAndUpdate(filter, movie, { upsert: true });
+    res.redirect("/movies");
   } else {
     next(createError(404));
   }

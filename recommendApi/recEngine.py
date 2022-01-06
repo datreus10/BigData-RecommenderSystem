@@ -9,7 +9,7 @@ class RecommendationEngine:
 
         self.ratingData = (
             self.spark.read.csv(
-                path=f"{dataset_path}/ratings.csv",
+                path=f"{dataset_path}/ratings_small.csv",
                 sep=",", header=True, quote='"', schema="userId INT, movieId INT, rating DOUBLE, timestamp INT",
             ).select("userId", "movieId", "rating")
             .cache()
@@ -17,7 +17,7 @@ class RecommendationEngine:
 
         self.linkData = (
             spark.read.csv(
-                path=f"{dataset_path}/links.csv",
+                path=f"{dataset_path}/links_small.csv",
                 sep=",", header=True, quote='"', schema="movieId INT, imdbId STRING, tmdbId STRING",
             ).select("movieId", "tmdbId")
             .cache()

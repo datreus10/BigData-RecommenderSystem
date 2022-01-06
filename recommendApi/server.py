@@ -23,7 +23,7 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 recEngine = False
-
+filePath=".\\data\\data-small"
 
 @app.get("/")
 def root():
@@ -33,21 +33,22 @@ def root():
 # http://localhost:8000/movie/rec?userId=5&limit=10
 @app.get("/movie/rec")
 def getRec(userId: int = 1, limit: int = 50):
-    global recEngine
+    global recEngine,filePath
     if not recEngine:
-        recEngine = RecommendationEngine(spark, "./data/ml-25m")
+        recEngine = RecommendationEngine(spark, filePath)
     return recEngine.getRatingForUser(userId, limit)
+
 
 @app.post("/movie/rating")
 def addRating(listRating:List[Rating]):
-    dataset = Data()
+    global recEngine,filePath
+    dataset = Data(filePath)
     dataset.addRating(listRating)
-    global recEngine
     if not recEngine:
-        recEngine = RecommendationEngine(spark, "./data/ml-25m")
+        recEngine = RecommendationEngine(spark, filePath)
     else:
         recEngine.train_model()
-    return {"Hello":"World"}
+    return {"msg":"success"}
 
 
 if __name__ == "__main__":

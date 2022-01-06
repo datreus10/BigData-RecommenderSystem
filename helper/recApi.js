@@ -6,7 +6,20 @@ const postRating = (listRating) => {
   return axios
     .post(baseURL + `/movie/rating`, listRating)
     .then((res) => res.data)
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      return "error";
+    });
 };
 
-module.exports = { postRating };
+const recMovieForUser = (userId, limit = 50) => {
+  return axios
+    .get(baseURL + `/movie/rec?userId=${userId}&limit=${limit}`)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.log(err);
+      return "error";
+    });
+};
+
+module.exports = { postRating, recMovieForUser };
