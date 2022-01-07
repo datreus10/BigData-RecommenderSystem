@@ -32,6 +32,16 @@ const convertToTmdbId = (listMovieId) => {
     });
 };
 
+const convertToMovieId = (listTmdbId) => {
+  return axios
+    .post(baseURL + `/to_movieID`, listTmdbId)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.log(err);
+      return "error";
+    });
+};
+
 const getRandomMovies = (limit) => {
   return axios
     .get(baseURL + `/movie/random?limit=${limit}`)
@@ -47,4 +57,5 @@ module.exports = {
   recMovieForUser,
   convertToTmdbId,
   getRandomMovies,
+  convertToMovieId,
 };

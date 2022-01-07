@@ -74,10 +74,14 @@ const detailMovie = async (req, res, next) => {
 
   const recMovies = await movieAPI.getMoviesById(listId);
   const movieDetail = await movieAPI.getMoviesById([req.query.tmdbId]);
+  const movieId = (await recAPI.convertToMovieId([req.query.tmdbId]))[
+    "movieId"
+  ];
   res.render("detail", {
     user: req.user,
     movie: movieDetail[0],
     recMovies: recMovies,
+    movieId: movieId,
   });
 };
 
@@ -94,16 +98,32 @@ const parseReview = (data) => {
     title: data.title,
     review: data.review,
     rating: rating,
+    tmdbId: data.tmdbId,
+    movieId: data.movieId,
   };
 };
 
-const reviewMovie = (req, res, next) => {
+const reviewMovie = async (req, res, next) => {
   try {
+    if (!req.user.id) {
+      res.status(401);
+      res.send("Require login");
+      return;
+    }
     const review = parseReview(req.body);
-    console.log(review);
-    res.render("detail", {
-      user: req.user,
-    });
+    const postRes = await recAPI.postRating([
+      {
+        userId: req.user.id,
+        movieId: review.movieId,
+        rating: review.rating,
+      },
+    ]);
+    if (postRes) {
+      res.send("OK");
+    } else {
+      res.status(400);
+      res.send("Failed");
+    }
   } catch (error) {
     console.log(error);
     next(createError(404));

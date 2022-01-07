@@ -54,17 +54,24 @@ def addRating(listRating: List[Rating]):
     if not recEngine:
         recEngine = RecommendationEngine(spark, filePath)
     else:
+        print("train_model")
         recEngine.train_model()
     return {"msg": "success"}
 
 
 @app.post("/to_tmdbID")
 def toTmdbId(listMovieId: List[str]):
-    print(listMovieId)
     global recEngine, filePath
     if not recEngine:
         recEngine = RecommendationEngine(spark, filePath)
     return recEngine.convertToTmdbId(listMovieId)
+
+@app.post("/to_movieID")
+def toMovieId(listTmdbId: List[str]):
+    global recEngine, filePath
+    if not recEngine:
+        recEngine = RecommendationEngine(spark, filePath)
+    return recEngine.convertToMovieId(listTmdbId)
 
 
 if __name__ == "__main__":

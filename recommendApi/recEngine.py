@@ -57,3 +57,6 @@ class RecommendationEngine:
 
     def convertToTmdbId(self, listMovieId):
         return self.linkData.filter(self.linkData.movieId.isin(listMovieId)).toPandas().to_dict('list')
+
+    def convertToMovieId(self, listTmdbId):
+        return self.linkData.filter(self.linkData.tmdbId.isin(listTmdbId)).toPandas().to_dict('list')
