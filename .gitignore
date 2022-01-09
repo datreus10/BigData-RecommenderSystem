@@ -41,7 +41,7 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
-data/
+data/ml-25m
 recommendation/checkpoint
 
 # Snowpack dependency directory (https://snowpack.dev/)
