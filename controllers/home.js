@@ -1,10 +1,12 @@
 const movieAPI = require("../helper/movieAPI");
-
-const newMovies = [862, 8844, 15602, 31357, 11862];
+const helper = require("../helper/helper");
+const recAPI = require("../helper/recApi");
 
 const getHomePage = async (req, res, next) => {
+  const newMovies = await recAPI.getRandomMovies(6);
   res.render("index", {
-    movies: await movieAPI.getMoviesById(newMovies),
+    ids: newMovies,
+    movies: await movieAPI.getMoviesById(newMovies["tmdbId"]),
     user: req.user,
   });
 };

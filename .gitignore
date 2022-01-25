@@ -41,8 +41,11 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
-data/
-recommendation/checkpoint
+data/big/
+recommendation/checkpoint/
+recommendation/modelRecNormal/
+recommendation/modelRecBest/
+recommendApi/__pycache__/
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
@@ -72,7 +75,6 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
 .env.test
 .env.production
 

@@ -26,8 +26,11 @@ $(document).ready(function () {
 				alert("Successfully post a review!!");
 				location.reload();
 			})
-			.fail(function () {
-				alert("error");
+			.fail(function(xhr, textStatus, errorThrown) {
+				alert(xhr.responseText);
+				if(xhr.status ===401)
+					window.location.href = "/signin";
+				
 			})
 			.always(function () {
 				// alert("finished");

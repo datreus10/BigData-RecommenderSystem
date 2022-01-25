@@ -1,9 +1,13 @@
-var mongoose = require ('mongoose')
+var mongoose = require("mongoose");
 
 var MovieSchema = new mongoose.Schema({
-   userId: Number,
-   movieId: Number,
-   tmdbId: Number,
-})
+  userId: Number,
+  recMovies: [
+    {
+      movieId: Number,
+      tmdbId: Number,
+    },
+  ],
+});
 
- module.exports = mongoose.model('Movie',MovieSchema) 
+module.exports = mongoose.model("Movie", MovieSchema);

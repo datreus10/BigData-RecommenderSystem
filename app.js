@@ -7,7 +7,6 @@ var connectDatabase = require('./config/ConnectDatabase')
 connectDatabase()
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var pythonopen = require('./routes/pythonopen');
 var moviesRouter = require('./routes/movies');
 var signupRouter = require('./routes/SignUp');
 var signinRouter = require('./routes/SignIn');
@@ -27,7 +26,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/movies',moviesRouter);
-app.use('/name', pythonopen);
 app.use('/signup',signupRouter);
 app.use('/signin',signinRouter);
 app.use('/logout',logoutRouter);

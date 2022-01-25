@@ -3,7 +3,6 @@ var router = express.Router();
 var {
     getmoviespage,
     search,
-    filter,
     detailMovie,
     reviewMovie,
     getrating,
@@ -17,9 +16,7 @@ router.get('/rating',verifytoken, getrating);
 router.post('/rating',verifytoken, postrating);
 router.get('/detail',verifytoken, detailMovie);
 router.post('/review',verifytoken, reviewMovie);
-router.post('/search',verifytoken, search);
-router.post('/filter',verifytoken, filter);
-
+router.post('/',verifytoken, search);
 
 
 module.exports = router;

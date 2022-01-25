@@ -3,7 +3,7 @@
         <div class="col-12 col-sm-4">
             <div class="card__cover">
                 <img src="https://image.tmdb.org/t/p/w500<%= movie.poster_path %>" alt="">
-                <a href="/movies/detail" class="card__play">
+                <a href="/movies/detail?tmdbId=<%= movie.id %>" class="card__play">
                     <i class="icon ion-ios-play"></i>
                 </a>
             </div>
@@ -11,11 +11,11 @@
 
         <div class="col-12 col-sm-8">
             <div class="card__content">
-                <h3 class="card__title"><a href="/movies/detail">
+                <h3 class="card__title"><a href="/movies/detail?tmdbId=<%= movie.id %>">
                         <%= movie.title %>
                     </a></h3>
                 <span class="card__category">
-                    <%movie.genres.forEach(genre =>{%>                       
+                    <%movie.genres && movie.genres.forEach(genre =>{%>                       
                         <a href="#"><%=genre.name%></a>
                     <%})%>
                 </span>
