@@ -1,38 +1,42 @@
 const movieAPI = require("../helper/movieAPI");
 const recAPI = require("../helper/recAPI");
 var Movie = require("../models/movie");
-const {
-  type
-} = require("express/lib/response");
+var createError = require('http-errors');
 
 const getmoviespage = async (req, res, next) => {
-  const userId = req.user.id;
-  if (userId) {
-    const cacheMovies = await Movie.findOne({
-      userId: userId,
-    });
-    if (cacheMovies) {
-      const fetchMovies = await movieAPI.getMoviesById(
-        cacheMovies.recMovies.map((e) => e.tmdbId)
-      );
+  try {
+    const userId = req.user.id;
+    if (userId) {
+      const cacheMovies = await Movie.findOne({
+        userId: userId,
+      });
+      if (cacheMovies) {
+        const fetchMovies = await movieAPI.getMoviesById(
+          cacheMovies.recMovies.map((e) => e.tmdbId)
+        );
+        res.render("movies", {
+          movies: fetchMovies,
+          recommendmovies: fetchMovies.slice(0, 5),
+          user: req.user,
+        });
+      } else {
+        res.redirect("movies/rating");
+      }
+    } else {
+      const listId = (await recAPI.getRandomMovies(50))["tmdbId"];
+      let fetchMovies = await movieAPI.getMoviesById(listId);
+      let sorted = fetchMovies.sort((a, b) => b.vote_average - a.vote_average);
       res.render("movies", {
-        movies: fetchMovies,
-        recommendmovies: fetchMovies.slice(0, 5),
+        movies: sorted,
+        recommendmovies: sorted.slice(0, 5),
         user: req.user,
       });
-    } else {
-      res.redirect("movies/rating");
     }
-  } else {
-    const listId = (await recAPI.getRandomMovies(50))["tmdbId"];
-    let fetchMovies = await movieAPI.getMoviesById(listId);
-    let sorted = fetchMovies.sort((a, b) => b.vote_average - a.vote_average);
-    res.render("movies", {
-      movies: sorted,
-      recommendmovies: sorted.slice(0, 5),
-      user: req.user,
-    });
+  } catch (error) {
+    console.log(error);
+    next(createError(404));
   }
+
 };
 
 const detailMovie = async (req, res, next) => {

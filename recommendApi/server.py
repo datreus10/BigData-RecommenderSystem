@@ -26,8 +26,8 @@ spark = SparkSession.builder \
     .appName('movieRecommendationPySpark') \
     .getOrCreate()
 
-recEngine = False
 filePath = ".\\data\\small"
+recEngine = RecommendationEngine(spark, filePath)
 
 
 @app.get("/")
@@ -38,16 +38,12 @@ def root():
 # http://localhost:8000/movie/rec?userId=5&limit=10
 @app.get("/movie/rec")
 def getRec(userId: int = 1, limit: int = 50):
-    global recEngine, filePath
-    if not recEngine:
-        recEngine = RecommendationEngine(spark, filePath)
+    global recEngine
     return recEngine.getRatingForUser(userId, limit)
 
 @app.get("/movie/random")
 def getRec(limit:int=1):
-    global recEngine, filePath
-    if not recEngine:
-        recEngine = RecommendationEngine(spark, filePath)
+    global recEngine
     return recEngine.getRandomMovie(limit)
 
 @app.post("/movie/rating")
@@ -56,27 +52,21 @@ def addRating(listRating: List[Rating]):
     dataset = Data(filePath)
     print(listRating)
     dataset.addRating(listRating)
-    if not recEngine:
-        recEngine = RecommendationEngine(spark, filePath)
-    else:
-        print("train_model")
-        recEngine.load_data()
-        recEngine.train_model()
+    print("train_model")
+    recEngine.load_data(0)
+    recEngine.train_model()
     return {"msg": "success"}
+    
 
 
 @app.post("/to_tmdbID")
 def toTmdbId(listMovieId: List[str]):
-    global recEngine, filePath
-    if not recEngine:
-        recEngine = RecommendationEngine(spark, filePath)
+    global recEngine
     return recEngine.convertToTmdbId(listMovieId)
 
 @app.post("/to_movieID")
 def toMovieId(listTmdbId: List[str]):
-    global recEngine, filePath
-    if not recEngine:
-        recEngine = RecommendationEngine(spark, filePath)
+    global recEngine
     return recEngine.convertToMovieId(listTmdbId)
 
 

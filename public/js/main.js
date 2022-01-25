@@ -27,9 +27,14 @@ $(document).ready(function () {
 				location.reload();
 			})
 			.fail(function(xhr, textStatus, errorThrown) {
-				alert(xhr.responseText);
-				if(xhr.status ===401)
+				
+				if(xhr.status===404){
+					$("html").html(xhr.responseText);
+				}
+				if(xhr.status ===401){
+					alert(xhr.responseText);
 					window.location.href = "/signin";
+				}
 				
 			})
 			.always(function () {

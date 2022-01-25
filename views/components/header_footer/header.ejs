@@ -27,6 +27,7 @@
                                 <a href="/about" class="header__nav-link">About</a>
                             </li>
                             <!-- dropdown -->
+                            <%if(!user){%>
                             <li class="dropdown header__nav-item">
                                 <a class="dropdown-toggle header__nav-link header__nav-link--more" href="#"
                                     role="button" id="dropdownMenuMore" data-toggle="dropdown" aria-haspopup="true"
@@ -37,6 +38,7 @@
                                     <li><a href="/signup">Sign Up</a></li>
                                 </ul>
                             </li>
+                            <%}%>
                             <!-- end dropdown -->
                         </ul>
                         <!-- end header nav -->
