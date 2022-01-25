@@ -7,24 +7,25 @@ class RecommendationEngine:
 
     def __init__(self, spark, dataset_path):
         self.spark = spark
-
+        self.dataset_path = dataset_path
+        self.load_data()
+        self.train_model()
+    
+    def load_data(self):
         self.ratingData = (
             self.spark.read.csv(
-                path=f"{dataset_path}/ratings_small.csv",
+                path=f"{self.dataset_path}/ratings.csv",
                 sep=",", header=True, quote='"', schema="userId INT, movieId INT, rating DOUBLE, timestamp INT",
             ).select("userId", "movieId", "rating")
             .cache()
         )
-
         self.linkData = (
-            spark.read.csv(
-                path=f"{dataset_path}/links_small.csv",
+            self.spark.read.csv(
+                path=f"{self.dataset_path}/links.csv",
                 sep=",", header=True, quote='"', schema="movieId INT, imdbId STRING, tmdbId STRING",
             ).select("movieId", "tmdbId")
             .cache()
         )
-
-        self.train_model()
 
     def train_model(self):
         als = ALS(

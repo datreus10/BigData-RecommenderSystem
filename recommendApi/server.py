@@ -1,3 +1,4 @@
+import os
 import findspark
 findspark.init()
 
@@ -10,6 +11,9 @@ from data import Data
 from recEngine import RecommendationEngine
 from model import Rating
 
+os.environ['SPARK_HOME']="C:\BigData\spark-3.0.3-bin-hadoop2.7"
+os.environ['JAVA_HOME']="C:\Program Files\Java\jdk1.8.0_311"
+os.environ['HADOOP_HOME']="C:\BigData\Hadoop"
 
 
 #import recEngine
@@ -23,7 +27,7 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 recEngine = False
-filePath = ".\\data\\data-small"
+filePath = ".\\data\\small"
 
 
 @app.get("/")
@@ -50,11 +54,13 @@ def getRec(limit:int=1):
 def addRating(listRating: List[Rating]):
     global recEngine, filePath
     dataset = Data(filePath)
+    print(listRating)
     dataset.addRating(listRating)
     if not recEngine:
         recEngine = RecommendationEngine(spark, filePath)
     else:
         print("train_model")
+        recEngine.load_data()
         recEngine.train_model()
     return {"msg": "success"}
 

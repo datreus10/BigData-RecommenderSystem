@@ -41,8 +41,11 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
-data/ml-25m
-recommendation/checkpoint
+data/big/
+recommendation/checkpoint/
+recommendation/modelRecNormal/
+recommendation/modelRecBest/
+recommendApi/__pycache__/
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/

@@ -1,7 +1,9 @@
 const movieAPI = require("../helper/movieAPI");
 const recAPI = require("../helper/recAPI");
 var Movie = require("../models/movie");
-const { type } = require("express/lib/response");
+const {
+  type
+} = require("express/lib/response");
 
 const getmoviespage = async (req, res, next) => {
   const userId = req.user.id;
@@ -31,35 +33,6 @@ const getmoviespage = async (req, res, next) => {
       user: req.user,
     });
   }
-
-  // const user = req.user;
-  // let userId = user.id;
-  // let recMovies = [];
-  // if (userId != null) {
-  //   let recommendmovie = await Movie.find({ userId });
-  //   if (recommendmovie !== null && recommendmovie.length > 0) {
-  //     recMovies = recommendmovie.map((movie) => movie.tmdbId);
-  //     const fetchMovies = await movieAPI.getMoviesById(recMovies);
-  //     res.render("movies", {
-  //       movies: fetchMovies,
-  //       recommendmovies: fetchMovies.slice(0, 5),
-  //       user: req.user,
-  //     });
-  //   } else {
-  //     res.redirect("movies/rating");
-  //   }
-  // } else {
-  //   for (let i = 0; i < 100; i++) {
-  //     recMovies.push(Math.floor(Math.random() * 1000));
-  //   }
-  //   let fetchMovies = await movieAPI.getMoviesById(recMovies);
-  //   let sorted = fetchMovies.sort((a, b) => b.vote_average - a.vote_average);
-  //   res.render("movies", {
-  //     movies: sorted,
-  //     recommendmovies: sorted.slice(0, 5),
-  //     user: req.user,
-  //   });
-  // }
 };
 
 const detailMovie = async (req, res, next) => {
@@ -105,21 +78,36 @@ const parseReview = (data) => {
 
 const reviewMovie = async (req, res, next) => {
   try {
-    if (!req.user.id) {
+    const userId = req.user.id;
+    if (!userId) {
       res.status(401);
       res.send("Require login");
       return;
     }
     const review = parseReview(req.body);
-    const postRes = await recAPI.postRating([
-      {
-        userId: req.user.id,
-        movieId: review.movieId,
-        rating: review.rating,
-      },
-    ]);
+    const postRes = await recAPI.postRating([{
+      userId,
+      movieId: review.movieId,
+      rating: review.rating,
+    }, ]);
     if (postRes) {
       res.send("OK");
+      const recMovies = await recAPI.recMovieForUser(userId);
+      const movie = {
+        userId: userId,
+        recMovies: recMovies["movieId"].map((e, i) => {
+          return {
+            movieId: e,
+            tmdbId: recMovies["tmdbId"][i],
+          };
+        }),
+      };
+      const filter = {
+        userId: userId
+      };
+      await Movie.findOneAndUpdate(filter, movie, {
+        upsert: true
+      });
     } else {
       res.status(400);
       res.send("Failed");
@@ -151,7 +139,13 @@ const search = async (req, res, next) => {
       listid.push(i);
     }
     listmovie = await movieAPI.getMoviesById(listid);
-    let { type, starbegin, starend, yearbegin, yearend } = req.body;
+    let {
+      type,
+      starbegin,
+      starend,
+      yearbegin,
+      yearend
+    } = req.body;
     listmovie = listmovie.filter((movie) => {
       let year = movie.release_date.split("-")[0];
       let gen = movie.genres.filter((a) => a.name == type);
@@ -207,8 +201,12 @@ const postrating = async (req, res, next) => {
         };
       }),
     };
-    const filter = { userId: userId };
-    await Movie.findOneAndUpdate(filter, movie, { upsert: true });
+    const filter = {
+      userId: userId
+    };
+    await Movie.findOneAndUpdate(filter, movie, {
+      upsert: true
+    });
     res.redirect("/movies");
   } else {
     next(createError(404));
