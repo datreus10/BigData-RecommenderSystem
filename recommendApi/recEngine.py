@@ -77,19 +77,20 @@ class RecommendationEngine:
         return self.linkData.filter(self.linkData.movieId.isin(listMovieId)).toPandas().to_dict('list')
 
     def convertToMovieId(self, listTmdbId):
-        # creating a dataframe
-        df_tmdbId = self.spark.createDataFrame([listTmdbId], ["tmdbId"])
-
         # find list tmdbid not in file
-        tmp = df_tmdbId.join(self.linkData, on=['tmdbId'], how='left_anti').select(
-            'tmdbId').rdd.map(lambda row: row[0]).collect()
+        # tmp = df_tmdbId.join(self.linkData, on=['tmdbId'], how='left_anti').select(
+        #     'tmdbId').rdd.map(lambda row: row[0]).collect()
+        existElement = self.linkData.filter(self.linkData.tmdbId.isin(listTmdbId)).select('tmdbId').rdd.map(lambda row: row[0]).collect()
+        tmp = [e for e in listTmdbId if e not in existElement]
 
         # if exist insert to file
         if len(tmp) > 0:
             lastMovieId = self.linkData.tail(1)[0]['movieId']
-            self.dataset.addNewMovie(lastMovieId, listTmdbId)
+            self.dataset.addNewMovie(lastMovieId, tmp)
             self.load_data(1)
 
+    
         data = self.linkData.filter(self.linkData.tmdbId.isin(
             listTmdbId)).toPandas().to_dict('list')
+        
         return data
